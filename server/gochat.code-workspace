@@ -1,0 +1,16 @@
+{
+  "folders": [
+    {
+      "name": "app",
+      "path": "./cmd/app"
+    },
+    {
+      "name": "internal",
+      "path": "./internal"
+    },
+    {
+      "name": "pkg",
+      "path": "./pkg"
+    }
+  ]
+}
