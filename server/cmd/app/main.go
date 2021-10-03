@@ -40,7 +40,7 @@ func main() {
 		switch r.Method {
 		case http.MethodGet:
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("Maliman!"))
+			w.Write([]byte("pong!"))
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
