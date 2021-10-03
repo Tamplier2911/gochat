@@ -1,0 +1,74 @@
+version: '3.9'
+services:
+  # vue spa
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+      target: dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/gochat
+      - /gochat/node_modules
+    # stdin_open: true
+    restart: always
+    depends_on:
+      server:
+        condition: service_healthy
+    links:
+      - server
+
+  # go server
+  server:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+      target: dev
+    ports:
+      - 8000:8000
+    # env_file:
+    # - ./.env
+    environment:
+      - PORT=8000
+    volumes:
+      - ./server:/opt/app/api
+    stdin_open: true
+    restart: always
+    # restart: on-failure
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8000/api/v1/ping']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+
+  # mysql db
+  db:
+    platform: linux/amd64
+    image: mysql
+    environment:
+      - MYSQL_DATABASE=db
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    # - MYSQL_USER=
+    # - MYSQL_PASSWORD=
+    # - MYSQL_ROOT_PASSWORD=
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '--silent']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db_data:

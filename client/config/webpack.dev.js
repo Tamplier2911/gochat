@@ -1,4 +1,4 @@
-const paths = require('./paths');
+// const paths = require('./paths');
 
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
@@ -17,7 +17,7 @@ module.exports = merge(common, {
     compress: false,
     port: 3000,
     historyApiFallback: true,
-    open: true,
+    open: false,
     hot: true,
     // publicPath: '/',
     // proxy: ,

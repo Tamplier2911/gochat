@@ -2,32 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"os"
 	"time"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
-	fmt.Println("booting...")
-	sec, min, hour := 0, 0, 0
-	for {
-		time.Sleep(time.Second * 1)
-		fmt.Print("\033[H\033[2J")
 
-		fmt.Printf("S:%d M:%d H:%d \n", sec, min, hour)
-		sec += 1
-		switch {
-		case hour == 23 && min == 59 && sec == 60:
-			hour = 0
-		case min == 59 && sec == 60:
-			min = 0
-			hour += 1
-		case sec == 60:
-			sec = 0
-			min += 1
-		}
-	}
-}
-
-/*
 	// get port env
 	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
 	if port == ":" {
@@ -51,11 +36,11 @@ func main() {
 	fmt.Printf("DB: %+v", db)
 
 	// serve api
-	router.HandleFunc("/api/v1/hello", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/api/v1/ping", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("Hello, Chat!"))
+			w.Write([]byte("pong!"))
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -76,5 +61,28 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to run http server: %s \n", err)
 	}
+
+}
+
+/*
+
+fmt.Println("booting...")
+sec, min, hour := 0, 0, 0
+for {
+	time.Sleep(time.Second * 1)
+
+	fmt.Printf("S:%d M:%d H:%d \n", sec, min, hour)
+	sec += 1
+	switch {
+	case hour == 23 && min == 59 && sec == 60:
+		hour = 0
+	case min == 59 && sec == 60:
+		min = 0
+		hour += 1
+	case sec == 60:
+		sec = 0
+		min += 1
+	}
+}
 
 */
